@@ -1,0 +1,71 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+ //ca : 자원 할당 경우의 수, pr : 프로세스 수, re : 자원수/자원의 총 개수
+// prn : 프로세스 번호, 자원1 요청 개수, pan : 프로세스 번호/자원1 할당 개수
+
+int i,j,a;
+int re[6]; // 자원의 총 개수, 자원1의 개수, 자원2의 개수..
+int prn[4][6]; // 프로세스 번호, 자원1 요청 개수, 자원2 요청 개수..
+int pan[4][6]; // 프로세스 번호, 자원1 할당 개수, 자원2 할당 개수..
+int avai[10]; // 자원의 총 개수, 자원1의 사용가능한 리소스..
+int ar; // re[0]=자원의 총 개수
+int count;
+int mark[100];
+
+int main()
+{
+   FILE* fp = NULL;
+   fp = fopen("info.txt", "r");
+   if (fp == NULL) {
+      printf("error\n");
+      exit(0);
+   }
+
+   int ca; // 경우의 수
+   fscanf(fp, "%d", &ca);
+   printf("경우의 수 : %d\n\n", ca);
+
+   for (int i = 1; i <= ca; i++) {
+      printf("Case #%d:\n", i);
+
+      int pr; // 프로세스 수
+      fscanf(fp, "%d", &pr);
+      printf("%d\n", pr);
+
+      for (int i = 0; i < 6; i++) {
+         fscanf(fp, "%d", &re[i]);
+         printf("%d ", re[i]);
+      }
+      printf("\n");
+
+      for (int i = 0; i < 4; i++) {
+         for (int j = 0; j < 6; j++) {
+            fscanf(fp, "%d", &prn[i][j]);
+            printf("%d ", prn[i][j]);
+         }
+         printf("\n");
+      }
+
+      for (int i = 0; i < 4; i++) {
+         for (int j = 0; j < 6; j++) {
+            fscanf(fp, "%d", &pan[i][j]);
+            printf("%d ", pan[i][j]);
+         }
+         printf("\n");
+      }
+
+      ar = re[0]; // 자원의 총 개수
+      printf("allocation vector : ");
+      for (int i = 0; i < ar; i++) {
+         avai[i] = re[i + 1];
+         for (int j = 0; j < pr; j++) {
+            avai[i] -= pan[j][i + 1];
+         }
+         printf("%d ", avai[i]);
+      }
+      printf("\n\n");
+   }
+      fclose(fp);
+      return;
+   }
